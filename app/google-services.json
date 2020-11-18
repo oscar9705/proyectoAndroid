@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "97005064253",
+    "firebase_url": "https://pickupschool-f8341.firebaseio.com",
+    "project_id": "pickupschool-f8341",
+    "storage_bucket": "pickupschool-f8341.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97005064253:android:ea12048662d2fbeb9e1a54",
+        "android_client_info": {
+          "package_name": "com.example.proyectoandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "97005064253-9grn4e9ifdrq9umpiaqrf5us12u3lg8h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.proyectoandroid",
+            "certificate_hash": "be786b10f87fa8308e0de098fc856933920b0262"
+          }
+        },
+        {
+          "client_id": "97005064253-pikl74rmkd4j8cc8v3d9o7j5v3j5l67p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3s-jq9Q7P8ghCbUrclbwYkEsWj_6WDto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "97005064253-pikl74rmkd4j8cc8v3d9o7j5v3j5l67p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
