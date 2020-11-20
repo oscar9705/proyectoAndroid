@@ -36,14 +36,15 @@ public class login extends AppCompatActivity {
                 System.out.println("entrando al oncomplete, el correo: "+et1.getText().toString());
                 if(task.isSuccessful()){
 
-                    System.out.println(et1.toString());
-                    Toast.makeText(login.this, "Authentication successful",
-                            Toast.LENGTH_SHORT).show();
+
+                    /*Toast.makeText(login.this, "Authentication successful",
+                            Toast.LENGTH_SHORT).show();*/
+                    toast("Autenticación exitosa");
+
                     et1.setText("");
                     et2.setText("");
                 } else {
-                    Toast.makeText(login.this, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show();
+                    toast("Autenticación fallida");
                 }
             }
         });
@@ -63,6 +64,9 @@ public class login extends AppCompatActivity {
                 }
             }
         });
+    }
+    public void toast(String mjs){
+        Toast.makeText(this, mjs, Toast.LENGTH_SHORT).show();
     }
 
 }
