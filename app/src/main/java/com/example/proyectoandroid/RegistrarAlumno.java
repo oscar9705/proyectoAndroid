@@ -18,6 +18,9 @@ public class RegistrarAlumno extends AppCompatActivity {
         tableLayout =  (TableLayout)findViewById(R.id.tableAlumnos);
         tableLayout.setStretchAllColumns(true);
         cargarFilas();
+        cargarFilas();
+        cargarFilas();
+        cargarFilas();
 
 
 
@@ -46,14 +49,37 @@ public class RegistrarAlumno extends AppCompatActivity {
 
         return tr;
     }
+    public TableRow separador(){
+        final TableRow trSep = new TableRow(this);
+        TableLayout.LayoutParams trParamsSep = new
+                TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,
+                TableLayout.LayoutParams.WRAP_CONTENT);
+        trParamsSep.setMargins(0,0,0,0);
+        trSep.setLayoutParams(trParamsSep);
+        TextView tvSep = new TextView(this);
+        TableRow.LayoutParams tvSepLay = new
+                TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT);
+        tvSepLay.span = 3;
+        tvSep.setLayoutParams(tvSepLay);
+        tvSep.setBackgroundColor(Color.parseColor("#d9d9d9"));
+        tvSep.setHeight(1);
+        trSep.addView(tvSep);
+        return  trSep;
+    }
     public void cargarFilas(){
         final TextView tv = definirTV("oscar salazar","#ffffff");
         final TextView tv1 = definirTV("secundaria","#ffffff");
         final TextView tv2 = definirTV("eliminar","#ffffff");
         final TableRow tr = definirTR(1);
+        final TableRow ts = separador();
+        TableLayout.LayoutParams trParamsSep = new
+                TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,
+                TableLayout.LayoutParams.WRAP_CONTENT);
         tr.addView(tv);
         tr.addView(tv1);
         tr.addView(tv2);
         tableLayout.addView(tr);
+        tableLayout.addView(ts);
     }
 }

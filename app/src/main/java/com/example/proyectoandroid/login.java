@@ -3,6 +3,7 @@ package com.example.proyectoandroid;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -27,7 +28,12 @@ public class login extends AppCompatActivity {
         et2 = (EditText)findViewById(R.id.passwordEditText); // password
 
     }
-
+    public Intent redireccion(Class<?> cls){
+        return  new Intent(this,cls);
+    }
+    public void redirigirRegistro(View v){
+        startActivity(redireccion(Registro.class));
+    }
     public void registrar(View v){
         System.out.println("entrando al metodo registrar");
         mAuth.createUserWithEmailAndPassword(et1.getText().toString(),et2.getText().toString()).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>() {
