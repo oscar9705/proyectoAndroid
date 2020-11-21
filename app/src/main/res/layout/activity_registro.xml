@@ -142,19 +142,18 @@
 
             <TextView
                 android:id="@+id/textView9"
-                android:layout_width="43dp"
+                android:layout_width="91dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Contraseña" />
 
             <EditText
-                android:id="@+id/passwordEditText"
+                android:id="@+id/editTextPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPassword"
-                android:textSize="14sp" />
+                android:inputType="textPassword" />
 
         </LinearLayout>
 
@@ -172,6 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="registrarUser"
                 android:text="Registrar" />
         </LinearLayout>
 
