@@ -5,13 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 
 public class RegistrarAlumno extends AppCompatActivity {
-    String correo="";
+    String correo="", seccion="";
+
+    private RadioGroup radioGroup;
     private TableLayout tableLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +24,8 @@ public class RegistrarAlumno extends AppCompatActivity {
         setContentView(R.layout.activity_registrar_alumno);
         tableLayout =  (TableLayout)findViewById(R.id.tableAlumnos);
         tableLayout.setStretchAllColumns(true);
+        radioGroup = (RadioGroup)findViewById(R.id.radioGroupSeccion);
+        radioGroup.getCheckedRadioButtonId();
         Bundle dato = getIntent().getExtras();
         correo = dato.getString("correo");
         System.out.println("Registrar alumnos "+correo);
@@ -28,6 +35,19 @@ public class RegistrarAlumno extends AppCompatActivity {
         cargarFilas();
 
 
+
+    }
+    public void guardarAlumno(View v){
+        int radioButtonId = radioGroup.getCheckedRadioButtonId();
+        System.out.println(radioButtonId);
+
+        View radioButton = radioGroup.findViewById(radioButtonId);
+        System.out.println(radioButton.toString());
+
+        int indice = radioGroup.indexOfChild(radioButton);
+        System.out.println("Indice "+indice);
+        RadioButton rbs= (RadioButton)findViewById(radioButtonId);
+        System.out.println("texto "+rbs.getText().toString());
 
     }
 
