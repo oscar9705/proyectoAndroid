@@ -9,7 +9,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+
 public class RegistrarAlumno extends AppCompatActivity {
+    String correo="";
     private TableLayout tableLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +19,9 @@ public class RegistrarAlumno extends AppCompatActivity {
         setContentView(R.layout.activity_registrar_alumno);
         tableLayout =  (TableLayout)findViewById(R.id.tableAlumnos);
         tableLayout.setStretchAllColumns(true);
+        Bundle dato = getIntent().getExtras();
+        correo = dato.getString("correo");
+        System.out.println("Registrar alumnos "+correo);
         cargarFilas();
         cargarFilas();
         cargarFilas();

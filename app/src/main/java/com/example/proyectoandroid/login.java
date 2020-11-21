@@ -32,7 +32,9 @@ public class login extends AppCompatActivity {
         return  new Intent(this,cls);
     }
     public void redirigirRegistro(View v){
-        startActivity(redireccion(Registro.class));
+        Intent i = redireccion(Registro.class);
+        i.putExtra("email",mAuth.getCurrentUser().getEmail());
+        startActivity(i);
     }
     public void redirigirMenu(){
         startActivity(redireccion(Menu.class));
@@ -66,7 +68,11 @@ public class login extends AppCompatActivity {
 
                     Toast.makeText(login.this, "Autenticación exitosa",
                             Toast.LENGTH_SHORT).show();
-                    redirigirMenu();
+                    System.out.println("login "+mAuth.getCurrentUser().getEmail());
+                    Intent i = new Intent(login.this,Menu.class);
+                    i.putExtra("correo",mAuth.getCurrentUser().getEmail());
+                    startActivity(i);
+                    //redirigirMenu();
                 } else {
                     Toast.makeText(login.this, "Autenticación fallida",
                             Toast.LENGTH_SHORT).show();
