@@ -34,7 +34,10 @@ public class login extends AppCompatActivity {
     public void redirigirRegistro(View v){
         startActivity(redireccion(Registro.class));
     }
-    public void registrar(View v){
+    public void redirigirMenu(){
+        startActivity(redireccion(Menu.class));
+    }
+    public void registrar(){
         System.out.println("entrando al metodo registrar");
         mAuth.createUserWithEmailAndPassword(et1.getText().toString(),et2.getText().toString()).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -56,16 +59,16 @@ public class login extends AppCompatActivity {
         });
     }
     public void ingresar(View v){
-        mAuth.signInWithEmailAndPassword(et1.toString(),et2.toString()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(et1.getText().toString(),et2.getText().toString()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    System.out.println(user.getEmail());
-                    Toast.makeText(login.this, "Authentication successful",
+
+                    Toast.makeText(login.this, "Autenticación exitosa",
                             Toast.LENGTH_SHORT).show();
+                    redirigirMenu();
                 } else {
-                    Toast.makeText(login.this, "Authentication failed.",
+                    Toast.makeText(login.this, "Autenticación fallida",
                             Toast.LENGTH_SHORT).show();
                 }
             }
