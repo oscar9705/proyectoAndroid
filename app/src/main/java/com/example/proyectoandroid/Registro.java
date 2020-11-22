@@ -36,7 +36,7 @@ public class Registro extends AppCompatActivity {
         correo =(EditText)findViewById(R.id.correoEditText);
         telefono =(EditText)findViewById(R.id.celularEditText);
         password =(EditText)findViewById(R.id.editTextPassword);
-        cargarDatosFirebase();
+
     }
     public void cargarDatosFirebase(){
         List<Student> studentList = new ArrayList<>();
