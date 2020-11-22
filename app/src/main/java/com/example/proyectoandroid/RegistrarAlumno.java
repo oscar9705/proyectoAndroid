@@ -17,15 +17,16 @@ import android.widget.TextView;
 import com.example.proyectoandroid.entity.Student;
 import com.example.proyectoandroid.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ public class RegistrarAlumno extends AppCompatActivity {
     private RadioGroup radioGroup;
     private EditText nombre;
     private TableLayout tableLayout;
+    List<Student> listaEstudiantes = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +50,12 @@ public class RegistrarAlumno extends AppCompatActivity {
         Bundle dato = getIntent().getExtras();
         correo = dato.getString("correo");
         System.out.println("Registrar alumnos "+correo);
+       cargarEstudiantes();
+
+      /*  cargarFilas();
         cargarFilas();
-        cargarFilas();
-        cargarFilas();
-        cargarFilas();
-        cargarDatosFirebase();
+        cargarFilas();*/
+        /*cargarDatosFirebase();*/
 
 
 
@@ -104,6 +107,18 @@ public class RegistrarAlumno extends AppCompatActivity {
 
 
         //db.collection("users").document("salazaroscar9705@gmail.com").collection("alumnos").document().set(stu3);
+    }
+    public void cargarEstudiantes(){
+        DocumentReference documentReference = db.collection("users").document(correo);
+        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                listaEstudiantes = user.getAlumnos();
+                System.out.println("cargar estudiantes "+listaEstudiantes.get(0).getNombre());
+                cargarFilas(user.getAlumnos());
+            }
+        });
     }
     public void guardarAlumno(View v){
         int radioButtonId = radioGroup.getCheckedRadioButtonId();
@@ -160,8 +175,20 @@ public class RegistrarAlumno extends AppCompatActivity {
         trSep.addView(tvSep);
         return  trSep;
     }
-    public void cargarFilas(){
-        final TextView tv = definirTV("oscar salazar","#ffffff");
+    public void cargarFilas(List<Student>students){
+        for(int i=0; i<students.size();i++){
+            final TextView tv = definirTV(students.get(i).getNombre(),"#ffffff");
+            final TextView tv1 = definirTV(students.get(i).getSeccion(),"#ffffff");
+            final TextView tv2 = definirTV("eliminar","#ffffff");
+            final TableRow tr = definirTR(i);
+            final TableRow ts = separador();
+            tr.addView(tv);
+            tr.addView(tv1);
+            tr.addView(tv2);
+            tableLayout.addView(tr);
+            tableLayout.addView(ts);
+        }
+       /* final TextView tv = definirTV("oscar salazar","#ffffff");
         final TextView tv1 = definirTV("secundaria","#ffffff");
         final TextView tv2 = definirTV("eliminar","#ffffff");
         final TableRow tr = definirTR(1);
@@ -173,6 +200,6 @@ public class RegistrarAlumno extends AppCompatActivity {
         tr.addView(tv1);
         tr.addView(tv2);
         tableLayout.addView(tr);
-        tableLayout.addView(ts);
+        tableLayout.addView(ts);*/
     }
 }
