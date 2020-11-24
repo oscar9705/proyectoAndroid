@@ -125,8 +125,14 @@ public class RegistrarAlumno extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 User user =value.toObject(User.class);
-                cargarFilas(user.getAlumnos());
+                if(listaEstudiantes.size() >= 1){
+                    Student student = new Student(user.getAlumnos().get(listaEstudiantes.size()-1).getNombre(),user.getAlumnos().get(listaEstudiantes.size()-1).getSeccion());
+                    crearFila(student,listaEstudiantes.size()+1);
+                } else {
+                    cargarFilas(user.getAlumnos());
+                }
                 listaEstudiantes = user.getAlumnos();
+
             }
         });
     }
@@ -136,6 +142,7 @@ public class RegistrarAlumno extends AppCompatActivity {
         listaEstudiantes.add(student);
         DocumentReference documentReference = db.collection("users").document(correo);
         documentReference.update(hashMapFirebase());
+
 
         //cargarFilas(listaEstudiantes);
         /*Student student = crearStudent();
@@ -206,10 +213,10 @@ public class RegistrarAlumno extends AppCompatActivity {
         return  trSep;
     }
     public void cargarFilas(List<Student>students){
-        for(int i=0; i<students.size();i++){
-            final TextView tv = definirTV(students.get(i).getNombre(),"#ffffff");
-            final TextView tv1 = definirTV(students.get(i).getSeccion(),"#ffffff");
-            final TextView tv2 = definirTV("eliminar","#ffffff");
+        for(int i=0; i<students.size();i++) {
+            final TextView tv = definirTV(students.get(i).getNombre(), "#ffffff");
+            final TextView tv1 = definirTV(students.get(i).getSeccion(), "#ffffff");
+            final TextView tv2 = definirTV("eliminar", "#ffffff");
             final TableRow tr = definirTR(i);
             final TableRow ts = separador();
             tr.addView(tv);
@@ -217,7 +224,11 @@ public class RegistrarAlumno extends AppCompatActivity {
             tr.addView(tv2);
             tableLayout.addView(tr);
             tableLayout.addView(ts);
+
+
         }
+
+
        /* final TextView tv = definirTV("oscar salazar","#ffffff");
         final TextView tv1 = definirTV("secundaria","#ffffff");
         final TextView tv2 = definirTV("eliminar","#ffffff");
@@ -231,5 +242,17 @@ public class RegistrarAlumno extends AppCompatActivity {
         tr.addView(tv2);
         tableLayout.addView(tr);
         tableLayout.addView(ts);*/
+    }
+    public void crearFila(Student student, int i){
+        final TextView tv = definirTV(student.getNombre(), "#ffffff");
+        final TextView tv1 = definirTV(student.getSeccion(), "#ffffff");
+        final TextView tv2 = definirTV("eliminar", "#ffffff");
+        final TableRow tr = definirTR(i);
+        final TableRow ts = separador();
+        tr.addView(tv);
+        tr.addView(tv1);
+        tr.addView(tv2);
+        tableLayout.addView(tr);
+        tableLayout.addView(ts);
     }
 }
