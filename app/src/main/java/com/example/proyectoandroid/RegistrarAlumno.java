@@ -20,6 +20,7 @@ import com.example.proyectoandroid.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -53,16 +54,9 @@ public class RegistrarAlumno extends AppCompatActivity {
         Bundle dato = getIntent().getExtras();
         correo = dato.getString("correo");
         System.out.println("Registrar alumnos "+correo);
-       cargarEstudiantesRealTime();
-
-      /*  cargarFilas();
-        cargarFilas();
-        cargarFilas();*/
-        /*cargarDatosFirebase();*/
-
-
-
+       cargarEstudiantesTimepoReal();
     }
+
     public void cargarDatosFirebase(){
         List<Student> studentList = new ArrayList<>();
         List<Student> studentLista = new ArrayList<>();
@@ -125,28 +119,49 @@ public class RegistrarAlumno extends AppCompatActivity {
 
 
     }
-    public void cargarEstudiantesRealTime(){
+    public void cargarEstudiantesTimepoReal(){
         DocumentReference documentReference = db.collection("users").document(correo);
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 User user =value.toObject(User.class);
                 cargarFilas(user.getAlumnos());
+                listaEstudiantes = user.getAlumnos();
             }
         });
     }
     public void guardarAlumno(View v){
+        System.out.println(listaEstudiantes.size()+"  tamaño de la lista");
+        Student student = crearStudent();
+        listaEstudiantes.add(student);
+        DocumentReference documentReference = db.collection("users").document(correo);
+        documentReference.update(hashMapFirebase());
+
+        //cargarFilas(listaEstudiantes);
+        /*Student student = crearStudent();
+        Map<String, Object> studentMap = hashMapFirebase(student);
+        db.collection("alumnos").document(correo).set(studentMap);*/
+    }
+    public String radioSeccion(){
         int radioButtonId = radioGroup.getCheckedRadioButtonId();
-        System.out.println(radioButtonId);
+        RadioButton rbs = (RadioButton)findViewById(radioButtonId);
+        return rbs.getText().toString();
+    }
+    public Student crearStudent(){
+        Student student = new Student();
+        student.setNombre(nombre.getText().toString());
+        student.setSeccion(radioSeccion());
 
-        View radioButton = radioGroup.findViewById(radioButtonId);
-        System.out.println(radioButton.toString());
+        return student;
+    }
+    public Map<String, Object>  hashMapFirebase(){
+        Map<String, Object> userMap =new HashMap<>();
+        userMap.put("alumnos",listaEstudiantes);
 
-        int indice = radioGroup.indexOfChild(radioButton);
-        System.out.println("Indice "+indice);
-        RadioButton rbs= (RadioButton)findViewById(radioButtonId);
-        System.out.println("texto "+rbs.getText().toString());
-
+        return userMap;
+    }
+    public void limpiarCampos(){
+        nombre.setText("");
     }
 
     public TextView definirTV(String mensaje, String color){
