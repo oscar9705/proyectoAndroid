@@ -1,6 +1,7 @@
 package com.example.proyectoandroid;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
@@ -21,7 +22,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -50,7 +53,7 @@ public class RegistrarAlumno extends AppCompatActivity {
         Bundle dato = getIntent().getExtras();
         correo = dato.getString("correo");
         System.out.println("Registrar alumnos "+correo);
-       cargarEstudiantes();
+       cargarEstudiantesRealTime();
 
       /*  cargarFilas();
         cargarFilas();
@@ -116,6 +119,18 @@ public class RegistrarAlumno extends AppCompatActivity {
                 User user = documentSnapshot.toObject(User.class);
                 listaEstudiantes = user.getAlumnos();
                 System.out.println("cargar estudiantes "+listaEstudiantes.get(0).getNombre());
+                cargarFilas(user.getAlumnos());
+            }
+        });
+
+
+    }
+    public void cargarEstudiantesRealTime(){
+        DocumentReference documentReference = db.collection("users").document(correo);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                User user =value.toObject(User.class);
                 cargarFilas(user.getAlumnos());
             }
         });
