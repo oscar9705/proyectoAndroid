@@ -20,7 +20,6 @@ import com.example.proyectoandroid.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -37,6 +36,7 @@ import java.util.Map;
 
 public class RegistrarAlumno extends AppCompatActivity {
     String correo="", seccion="";
+    int aux=0;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RadioGroup radioGroup;
     private EditText nombre;
@@ -55,6 +55,7 @@ public class RegistrarAlumno extends AppCompatActivity {
         correo = dato.getString("correo");
         System.out.println("Registrar alumnos "+correo);
        cargarEstudiantesTimepoReal();
+
     }
 
     public void cargarDatosFirebase(){
@@ -125,17 +126,24 @@ public class RegistrarAlumno extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 User user =value.toObject(User.class);
-                if(listaEstudiantes.size() >= 1){
+                int count = tableLayout.getChildCount();
+                for (int i = 1; i < count; i++) {
+                    View child = tableLayout.getChildAt(i);
+                    tableLayout.removeView(child);
+                }
+                /*if(listaEstudiantes.size() >= 1){
                     Student student = new Student(user.getAlumnos().get(listaEstudiantes.size()-1).getNombre(),user.getAlumnos().get(listaEstudiantes.size()-1).getSeccion());
                     crearFila(student,listaEstudiantes.size()+1);
                 } else {
                     cargarFilas(user.getAlumnos());
-                }
+                }*/
+                cargarFilas(user.getAlumnos());
                 listaEstudiantes = user.getAlumnos();
 
             }
         });
     }
+
     public void guardarAlumno(View v){
         System.out.println(listaEstudiantes.size()+"  tamaño de la lista");
         Student student = crearStudent();
@@ -217,6 +225,17 @@ public class RegistrarAlumno extends AppCompatActivity {
             final TextView tv = definirTV(students.get(i).getNombre(), "#ffffff");
             final TextView tv1 = definirTV(students.get(i).getSeccion(), "#ffffff");
             final TextView tv2 = definirTV("eliminar", "#ffffff");
+            aux= i;
+            tv2.setClickable(true);
+            tv2.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    listaEstudiantes.remove(aux);
+                    DocumentReference documentReference = db.collection("users").document(correo);
+                    documentReference.update(hashMapFirebase());
+                }
+            });
             final TableRow tr = definirTR(i);
             final TableRow ts = separador();
             tr.addView(tv);
