@@ -35,8 +35,7 @@ import java.util.Map;
 
 
 public class RegistrarAlumno extends AppCompatActivity {
-    String correo="", seccion="";
-    int aux=0;
+    String correo="";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RadioGroup radioGroup;
     private EditText nombre;
@@ -102,46 +101,27 @@ public class RegistrarAlumno extends AppCompatActivity {
                 }
             }
         });
-
-
-        //db.collection("users").document("salazaroscar9705@gmail.com").collection("alumnos").document().set(stu3);
     }
-    public void cargarEstudiantes(){
-        DocumentReference documentReference = db.collection("users").document(correo);
-        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User user = documentSnapshot.toObject(User.class);
-                listaEstudiantes = user.getAlumnos();
-                System.out.println("cargar estudiantes "+listaEstudiantes.get(0).getNombre());
-                cargarFilas(user.getAlumnos());
-            }
-        });
 
-
-    }
     public void cargarEstudiantesTimepoReal(){
         DocumentReference documentReference = db.collection("users").document(correo);
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 User user =value.toObject(User.class);
-                int count = tableLayout.getChildCount();
-                for (int i = 1; i < count; i++) {
-                    View child = tableLayout.getChildAt(i);
-                    tableLayout.removeView(child);
-                }
-                /*if(listaEstudiantes.size() >= 1){
-                    Student student = new Student(user.getAlumnos().get(listaEstudiantes.size()-1).getNombre(),user.getAlumnos().get(listaEstudiantes.size()-1).getSeccion());
-                    crearFila(student,listaEstudiantes.size()+1);
-                } else {
-                    cargarFilas(user.getAlumnos());
-                }*/
+                removerFilas();
                 cargarFilas(user.getAlumnos());
                 listaEstudiantes = user.getAlumnos();
-
             }
         });
+    }
+    public void removerFilas(){
+        int count = tableLayout.getChildCount();
+        System.out.println("cantidad de hijos " +count);
+        for (int i = 1; i < count; i++) {
+            View child = tableLayout.getChildAt(i);
+            tableLayout.removeView(child);
+        }
     }
 
     public void guardarAlumno(View v){
@@ -150,12 +130,8 @@ public class RegistrarAlumno extends AppCompatActivity {
         listaEstudiantes.add(student);
         DocumentReference documentReference = db.collection("users").document(correo);
         documentReference.update(hashMapFirebase());
-
-
-        //cargarFilas(listaEstudiantes);
-        /*Student student = crearStudent();
-        Map<String, Object> studentMap = hashMapFirebase(student);
-        db.collection("alumnos").document(correo).set(studentMap);*/
+        removerFilas();
+        limpiarCampos();
     }
     public String radioSeccion(){
         int radioButtonId = radioGroup.getCheckedRadioButtonId();
@@ -191,6 +167,21 @@ public class RegistrarAlumno extends AppCompatActivity {
         tv.setPadding(5, 15, 0, 15);
         return tv;
     }
+    public TextView definirTVDelete(String mensaje, String color, int i){
+        final TextView tv = new TextView(this);
+        tv.setLayoutParams(new
+                TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+        tv.setText(mensaje);
+        tv.setBackgroundColor(Color.parseColor(color));
+        tv.setTextColor(Color.parseColor("#000000"));
+        tv.setGravity(Gravity.LEFT);
+        tv.setPadding(5, 15, 0, 15);
+        tv.setClickable(true);
+        tv.setId(i);
+
+        return tv;
+    }
     public TableRow definirTR(int i){
         final TableRow tr = new TableRow(this);
         tr.setId(i+1);
@@ -224,16 +215,17 @@ public class RegistrarAlumno extends AppCompatActivity {
         for(int i=0; i<students.size();i++) {
             final TextView tv = definirTV(students.get(i).getNombre(), "#ffffff");
             final TextView tv1 = definirTV(students.get(i).getSeccion(), "#ffffff");
-            final TextView tv2 = definirTV("eliminar", "#ffffff");
-            aux= i;
-            tv2.setClickable(true);
+            TextView tv2 = definirTVDelete("eliminar", "#ffffff",i);
             tv2.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    listaEstudiantes.remove(aux);
+                    System.out.println(v.getId());
+                    listaEstudiantes.remove(v.getId());
                     DocumentReference documentReference = db.collection("users").document(correo);
                     documentReference.update(hashMapFirebase());
+                    removerFilas();
+
                 }
             });
             final TableRow tr = definirTR(i);
@@ -246,21 +238,6 @@ public class RegistrarAlumno extends AppCompatActivity {
 
 
         }
-
-
-       /* final TextView tv = definirTV("oscar salazar","#ffffff");
-        final TextView tv1 = definirTV("secundaria","#ffffff");
-        final TextView tv2 = definirTV("eliminar","#ffffff");
-        final TableRow tr = definirTR(1);
-        final TableRow ts = separador();
-        TableLayout.LayoutParams trParamsSep = new
-                TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,
-                TableLayout.LayoutParams.WRAP_CONTENT);
-        tr.addView(tv);
-        tr.addView(tv1);
-        tr.addView(tv2);
-        tableLayout.addView(tr);
-        tableLayout.addView(ts);*/
     }
     public void crearFila(Student student, int i){
         final TextView tv = definirTV(student.getNombre(), "#ffffff");
